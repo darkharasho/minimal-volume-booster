@@ -4,7 +4,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 16px;
-  width: 200px;
+  width: 260px;
+  text-align: center;
 }
 
 label {

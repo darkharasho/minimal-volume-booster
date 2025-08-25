@@ -2,8 +2,8 @@ const slider = document.getElementById('volume');
 const valueSpan = document.getElementById('value');
 
 slider.addEventListener('input', async () => {
-  const multiplier = parseFloat(slider.value);
-  valueSpan.textContent = multiplier.toFixed(1) + 'x';
+  const multiplier = parseFloat(slider.value) / 100;
+  valueSpan.textContent = slider.value + '%';
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (tab) {
     await chrome.scripting.executeScript({
