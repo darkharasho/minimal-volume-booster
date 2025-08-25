@@ -61,11 +61,12 @@ function updateBars(val) {
   const max = parseInt(slider.max, 10);
   const step = max / bars.length;
   const active = val === 0 ? 0 : Math.min(bars.length, Math.floor(val / step) + 1);
-  const min = 20;
-  const heightStep = (100 - min) / (bars.length - 1);
+  const min = 5;
+  const exponent = 1.3; // slightly steeper slope
   bars.forEach((bar, i) => {
     if (i < active) {
-      const height = min + heightStep * i;
+      const ratio = i / (bars.length - 1);
+      const height = min + Math.pow(ratio, exponent) * (100 - min);
       bar.style.height = `${height}%`;
     } else {
       bar.style.height = '0';
