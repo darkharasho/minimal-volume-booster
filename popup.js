@@ -16,6 +16,7 @@ slider.addEventListener('input', async () => {
   const multiplier = value / 100;
   valueSpan.textContent = `${value}%`;
   updateBars(value);
+  updateThumb(value);
   const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
     try {
@@ -39,6 +40,7 @@ async function init() {
     slider.value = value;
     valueSpan.textContent = `${value}%`;
     updateBars(value);
+    updateThumb(value);
     const multiplier = value / 100;
     try {
       await chrome.scripting.executeScript({
@@ -57,17 +59,29 @@ async function init() {
 
 function updateBars(val) {
   const max = parseInt(slider.max, 10);
-  const active = Math.floor((val / max) * bars.length);
+  const step = max / bars.length;
+  const active = val === 0 ? 0 : Math.min(bars.length, Math.floor(val / step) + 1);
   const min = 20;
-  const step = (100 - min) / (bars.length - 1);
+  const heightStep = (100 - min) / (bars.length - 1);
   bars.forEach((bar, i) => {
     if (i < active) {
-      const height = min + step * i;
+      const height = min + heightStep * i;
       bar.style.height = `${height}%`;
     } else {
       bar.style.height = '0';
     }
   });
+}
+
+function updateThumb(val) {
+  const max = parseInt(slider.max, 10);
+  const ratio = val / max;
+  let color;
+  if (ratio < 0.25) color = '#aee1c9';
+  else if (ratio < 0.5) color = '#f5e8b1';
+  else if (ratio < 0.75) color = '#f6c98f';
+  else color = '#ff8a80';
+  slider.style.setProperty('--thumb-color', color);
 }
 
 function isRestricted(url = '') {
