@@ -5,9 +5,9 @@ const bars = Array.from(document.querySelectorAll('.bar'));
 init();
 
 slider.addEventListener('input', async () => {
-  const value = parseInt(slider.value, 10);
+  const value = Number(slider.value) || 0;
   const multiplier = value / 100;
-  valueSpan.textContent = value + '%';
+  valueSpan.textContent = `${value}%`;
   updateBars(value);
   const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
@@ -28,9 +28,10 @@ async function init() {
   const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
     const stored = await chrome.storage.local.get(tab.id.toString());
-    const value = stored[tab.id] ?? 100;
+    let value = Number(stored[tab.id]);
+    if (!Number.isFinite(value)) value = 100;
     slider.value = value;
-    valueSpan.textContent = value + '%';
+    valueSpan.textContent = `${value}%`;
     updateBars(value);
     const multiplier = value / 100;
     try {

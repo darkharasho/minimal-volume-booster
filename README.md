@@ -9,6 +9,9 @@ A super minimalistic Chrome extension to amplify tab audio up to 600% with a sle
    The selected level is remembered per tab and reflected in an animated
    ten‑bar graphic above the slider marking each 10% step.
 
+> The control is disabled on Chrome internal pages (e.g. `chrome://`) where
+> content scripts cannot run.
+
 ## Icons
 To keep the repository free of binary files, icon PNGs are ignored. Generate them with [Pillow](https://python-pillow.org/) before loading the extension:
 
