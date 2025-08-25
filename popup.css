@@ -30,10 +30,10 @@ label {
   height: 4px;
 }
 
-.bar1 { background: #aee1c9; }
-.bar2 { background: #f5e8b1; }
-.bar3 { background: #f6c98f; }
-.bar4 { background: #ff8a80; }
+.bar1, .bar2 { background: #aee1c9; }
+.bar3, .bar4, .bar5 { background: #f5e8b1; }
+.bar6, .bar7 { background: #f6c98f; }
+.bar8, .bar9, .bar10 { background: #ff8a80; }
 
 #value {
   font-weight: 600;

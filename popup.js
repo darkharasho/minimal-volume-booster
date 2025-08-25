@@ -9,7 +9,7 @@ slider.addEventListener('input', async () => {
   const multiplier = value / 100;
   valueSpan.textContent = value + '%';
   updateBars(value);
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
     try {
       await chrome.scripting.executeScript({
@@ -25,7 +25,7 @@ slider.addEventListener('input', async () => {
 });
 
 async function init() {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
     const stored = await chrome.storage.local.get(tab.id.toString());
     const value = stored[tab.id] ?? 100;
@@ -49,7 +49,7 @@ async function init() {
 }
 
 function updateBars(val) {
-  const segment = 150;
+  const segment = parseInt(slider.max, 10) / bars.length;
   bars.forEach((bar, i) => {
     const start = i * segment;
     const end = start + segment;
@@ -63,8 +63,23 @@ function updateBars(val) {
   });
 }
 
-function isRestricted(url) {
-  return url.startsWith('chrome://') || url.startsWith('chrome-extension://') || url.startsWith('about:');
+function isRestricted(url = '') {
+  return (
+    !url ||
+    url.startsWith('chrome://') ||
+    url.startsWith('chrome-extension://') ||
+    url.startsWith('about:')
+  );
+}
+
+async function getActiveTab() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    return tab;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
 function setVolume(multiplier) {
@@ -80,3 +95,4 @@ function setVolume(multiplier) {
     el.__mvbCtx.gain.gain.value = multiplier;
   });
 }
+
