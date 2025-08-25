@@ -15,25 +15,25 @@ label {
   letter-spacing: 0.5px;
 }
 
-.bars {
-  display: flex;
-  align-items: flex-end;
-  height: 40px;
-  gap: 4px;
-  margin: 16px 0;
-}
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    height: 40px;
+    gap: 2px;
+    margin: 16px 0;
+  }
 
-.bar {
-  flex: 1;
-  border-radius: 2px;
-  transition: height 0.2s ease;
-  height: 0;
-}
+  .bar {
+    flex: 1;
+    border-radius: 2px;
+    transition: height 0.2s ease;
+    height: 0;
+  }
 
-.bar1, .bar2 { background: #aee1c9; }
-.bar3, .bar4, .bar5 { background: #f5e8b1; }
-.bar6, .bar7 { background: #f6c98f; }
-.bar8, .bar9, .bar10 { background: #ff8a80; }
+  .bar:nth-child(-n+10) { background: #aee1c9; }
+  .bar:nth-child(n+11):nth-child(-n+20) { background: #f5e8b1; }
+  .bar:nth-child(n+21):nth-child(-n+30) { background: #f6c98f; }
+  .bar:nth-child(n+31) { background: #ff8a80; }
 
 #value {
   font-weight: 600;

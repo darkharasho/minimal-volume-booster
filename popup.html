@@ -6,22 +6,11 @@
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <div class="container">
-    <label for="volume">Volume: <span id="value">100%</span></label>
-    <div class="bars" id="bars">
-      <div class="bar bar1"></div>
-      <div class="bar bar2"></div>
-      <div class="bar bar3"></div>
-      <div class="bar bar4"></div>
-      <div class="bar bar5"></div>
-      <div class="bar bar6"></div>
-      <div class="bar bar7"></div>
-      <div class="bar bar8"></div>
-      <div class="bar bar9"></div>
-      <div class="bar bar10"></div>
+    <div class="container">
+      <label for="volume">Volume: <span id="value">100%</span></label>
+      <div class="bars" id="bars"></div>
+      <input type="range" id="volume" min="0" max="600" step="10" value="100" />
     </div>
-    <input type="range" id="volume" min="0" max="600" step="10" value="100" />
-  </div>
   <script src="popup.js"></script>
 </body>
 </html>

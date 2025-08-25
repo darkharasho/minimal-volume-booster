@@ -1,6 +1,13 @@
 const slider = document.getElementById('volume');
 const valueSpan = document.getElementById('value');
-const bars = Array.from(document.querySelectorAll('.bar'));
+const barsContainer = document.getElementById('bars');
+const BAR_COUNT = 40;
+for (let i = 0; i < BAR_COUNT; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  barsContainer.appendChild(bar);
+}
+const bars = Array.from(barsContainer.children);
 
 init();
 
