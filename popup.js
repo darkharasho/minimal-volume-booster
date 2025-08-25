@@ -5,7 +5,7 @@ const bars = Array.from(document.querySelectorAll('.bar'));
 init();
 
 slider.addEventListener('input', async () => {
-  const value = Number(slider.value) || 0;
+  const value = sanitize(slider.value, 0);
   const multiplier = value / 100;
   valueSpan.textContent = `${value}%`;
   updateBars(value);
@@ -28,8 +28,7 @@ async function init() {
   const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
     const stored = await chrome.storage.local.get(tab.id.toString());
-    let value = Number(stored[tab.id]);
-    if (!Number.isFinite(value)) value = 100;
+    const value = sanitize(stored[tab.id], 100);
     slider.value = value;
     valueSpan.textContent = `${value}%`;
     updateBars(value);
@@ -50,17 +49,17 @@ async function init() {
 }
 
 function updateBars(val) {
-  const segment = parseInt(slider.max, 10) / bars.length;
+  const max = parseInt(slider.max, 10);
+  const active = Math.floor((val / max) * bars.length);
+  const min = 20;
+  const step = (100 - min) / (bars.length - 1);
   bars.forEach((bar, i) => {
-    const start = i * segment;
-    const end = start + segment;
-    let height = 0;
-    if (val >= end) {
-      height = 100;
-    } else if (val > start) {
-      height = ((val - start) / segment) * 100;
+    if (i < active) {
+      const height = min + step * i;
+      bar.style.height = `${height}%`;
+    } else {
+      bar.style.height = '0';
     }
-    bar.style.height = `${height}%`;
   });
 }
 
@@ -84,6 +83,7 @@ async function getActiveTab() {
 }
 
 function setVolume(multiplier) {
+  if (!Number.isFinite(multiplier)) return;
   document.querySelectorAll('video,audio').forEach(el => {
     if (!el.__mvbCtx) {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -95,5 +95,10 @@ function setVolume(multiplier) {
     }
     el.__mvbCtx.gain.gain.value = multiplier;
   });
+}
+
+function sanitize(val, fallback) {
+  const num = Number(val);
+  return Number.isFinite(num) ? num : fallback;
 }
 

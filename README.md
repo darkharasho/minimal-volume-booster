@@ -7,7 +7,8 @@ A super minimalistic Chrome extension to amplify tab audio up to 600% with a sle
 2. Choose **Load unpacked** and select this folder.
 3. Use the popup slider to set the volume between 0% and 600%.
    The selected level is remembered per tab and reflected in an animated
-   ten‑bar graphic above the slider marking each 10% step.
+   ten‑bar meter that grows from small green to tall red bars, marking each
+   10% step.
 
 > The control is disabled on Chrome internal pages (e.g. `chrome://`) where
 > content scripts cannot run.
