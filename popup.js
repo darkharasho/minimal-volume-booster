@@ -1,6 +1,9 @@
 const slider = document.getElementById('volume');
 const valueSpan = document.getElementById('value');
 const barsContainer = document.getElementById('bars');
+const settingsBtn = document.getElementById('settings-toggle');
+const main = document.getElementById('main');
+const settingsPage = document.getElementById('settings-page');
 const BAR_COUNT = 40;
 for (let i = 0; i < BAR_COUNT; i++) {
   const bar = document.createElement('div');
@@ -10,6 +13,32 @@ for (let i = 0; i < BAR_COUNT; i++) {
 const bars = Array.from(barsContainer.children);
 
 init();
+
+settingsBtn.addEventListener('click', () => {
+  const isHidden = settingsPage.classList.contains('hidden');
+  if (isHidden) {
+    main.classList.add('hidden');
+    settingsPage.classList.remove('hidden');
+    settingsBtn.textContent = '✕';
+    settingsBtn.classList.add('close');
+  } else {
+    settingsPage.classList.add('hidden');
+    main.classList.remove('hidden');
+    settingsBtn.textContent = '⚙';
+    settingsBtn.classList.remove('close');
+  }
+});
+
+document.querySelectorAll('input[name="theme"]').forEach(radio => {
+  radio.addEventListener('change', async () => {
+    applyTheme(radio.value);
+    try {
+      await chrome.storage.sync.set({ theme: radio.value });
+    } catch (e) {
+      console.error(e);
+    }
+  });
+});
 
 slider.addEventListener('input', async () => {
   const value = sanitize(slider.value, 0);
@@ -54,6 +83,16 @@ async function init() {
   } else {
     slider.disabled = true;
     valueSpan.textContent = 'N/A';
+  }
+
+  try {
+    const { theme } = await chrome.storage.sync.get('theme');
+    const selected = theme === 'light' ? 'light' : 'dark';
+    applyTheme(selected);
+    const radio = document.querySelector(`input[name="theme"][value="${selected}"]`);
+    if (radio) radio.checked = true;
+  } catch (e) {
+    console.error(e);
   }
 }
 
@@ -103,7 +142,6 @@ async function getActiveTab() {
     return null;
   }
 }
-
 function setVolume(multiplier) {
   if (!Number.isFinite(multiplier)) return;
   window.__mvbMultiplier = multiplier;
@@ -129,6 +167,10 @@ function setVolume(multiplier) {
     window.__mvbObserver.observe(document, { childList: true, subtree: true });
     document.addEventListener('play', apply, true);
   }
+}
+
+function applyTheme(theme) {
+  document.body.classList.toggle('light', theme === 'light');
 }
 
 function sanitize(val, fallback) {

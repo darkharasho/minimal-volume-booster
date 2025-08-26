@@ -6,10 +6,18 @@
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-    <div class="container">
+    <button id="settings-toggle" class="icon-button" aria-label="Settings">⚙</button>
+    <div class="container" id="main">
       <label for="volume">Volume: <span id="value">100%</span></label>
       <div class="bars" id="bars"></div>
       <input type="range" id="volume" min="0" max="600" step="10" value="100" />
+    </div>
+    <div id="settings-page" class="settings hidden">
+      <h2>Settings</h2>
+      <div class="theme-option">
+        <label><input type="radio" name="theme" value="light" /> Light</label>
+        <label><input type="radio" name="theme" value="dark" /> Dark</label>
+      </div>
     </div>
   <script src="popup.js"></script>
 </body>
