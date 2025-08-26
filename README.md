@@ -2,7 +2,7 @@
 
 # Minimal Volume Booster
 
-A super minimalistic Chrome extension to amplify tab audio up to 600% with a sleek dark UI and a color-coded slider inspired by the extension icon.
+A super minimalistic Chrome extension to amplify tab audio up to 600% with a sleek dark UI and a color-coded slider.
 
 ![Recording2025-08-25162153online-video-cutter com-ezgif com-crop](https://github.com/user-attachments/assets/53d02c72-c5bb-48b9-b6d4-694a7be0b960)
 
@@ -17,10 +17,3 @@ A super minimalistic Chrome extension to amplify tab audio up to 600% with a sle
 
 > The control is disabled on Chrome internal pages (e.g. `chrome://`) where
 > content scripts cannot run.
-
-## Icons
-To keep the repository free of binary files, icon PNGs are ignored. Generate them with [Pillow](https://python-pillow.org/) before loading the extension:
-
-```bash
-python icon_gen.py
-```
