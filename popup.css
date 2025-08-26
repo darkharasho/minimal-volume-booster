@@ -104,6 +104,7 @@ input[type=range]::-moz-range-thumb {
   font-size: 16px;
   line-height: 1;
   transition: transform 0.2s ease;
+  z-index: 10;
 }
 
 .icon-button.close {
@@ -125,6 +126,10 @@ input[type=range]::-moz-range-thumb {
   justify-content: center;
   align-items: center;
   gap: 12px;
+}
+
+.settings.hidden {
+  display: none;
 }
 
 body.light {
