@@ -137,10 +137,51 @@ input[type=range]::-moz-range-thumb {
 }
 
 body.light {
-  background: #fff;
+  background: #fef6e5;
   color: #000;
 }
 
 body.light .icon-button {
   color: #000;
+}
+
+.theme-option {
+  display: flex;
+  gap: 8px;
+}
+
+.theme-choice {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+.theme-choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theme-choice span {
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1px solid currentColor;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.theme-choice input:checked + span {
+  background: currentColor;
+  color: #121212;
+}
+
+body.light .theme-choice span {
+  border-color: #000;
+  color: #000;
+}
+
+body.light .theme-choice input:checked + span {
+  background: #000;
+  color: #fef6e5;
 }
