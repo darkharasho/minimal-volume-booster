@@ -1,3 +1,10 @@
+:root {
+  --color-1: #aee1c9;
+  --color-2: #f5e8b1;
+  --color-3: #f6c98f;
+  --color-4: #ff8a80;
+}
+
 body {
   background: #121212;
   color: #fff;
@@ -30,15 +37,15 @@ label {
     height: 0;
   }
 
-  .bar:nth-child(-n+10) { background: #aee1c9; }
-  .bar:nth-child(n+11):nth-child(-n+20) { background: #f5e8b1; }
-  .bar:nth-child(n+21):nth-child(-n+30) { background: #f6c98f; }
-  .bar:nth-child(n+31) { background: #ff8a80; }
+  .bar:nth-child(-n+10) { background: var(--color-1); }
+  .bar:nth-child(n+11):nth-child(-n+20) { background: var(--color-2); }
+  .bar:nth-child(n+21):nth-child(-n+30) { background: var(--color-3); }
+  .bar:nth-child(n+31) { background: var(--color-4); }
 
 #value {
   font-weight: 600;
   font-size: 1.25em;
-  background: linear-gradient(to right, #aee1c9, #f5e8b1, #f6c98f, #ff8a80);
+  background: linear-gradient(to right, var(--color-1), var(--color-2), var(--color-3), var(--color-4));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -56,20 +63,20 @@ input[type=range]::-webkit-slider-runnable-track {
   height: 8px;
   border-radius: 4px;
   background: linear-gradient(to right,
-    #aee1c9 0%, #aee1c9 25%,
-    #f5e8b1 25%, #f5e8b1 50%,
-    #f6c98f 50%, #f6c98f 75%,
-    #ff8a80 75%, #ff8a80 100%);
+    var(--color-1) 0%, var(--color-1) 25%,
+    var(--color-2) 25%, var(--color-2) 50%,
+    var(--color-3) 50%, var(--color-3) 75%,
+    var(--color-4) 75%, var(--color-4) 100%);
 }
 
 input[type=range]::-moz-range-track {
   height: 8px;
   border-radius: 4px;
   background: linear-gradient(to right,
-    #aee1c9 0%, #aee1c9 25%,
-    #f5e8b1 25%, #f5e8b1 50%,
-    #f6c98f 50%, #f6c98f 75%,
-    #ff8a80 75%, #ff8a80 100%);
+    var(--color-1) 0%, var(--color-1) 25%,
+    var(--color-2) 25%, var(--color-2) 50%,
+    var(--color-3) 50%, var(--color-3) 75%,
+    var(--color-4) 75%, var(--color-4) 100%);
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -78,7 +85,7 @@ input[type=range]::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--thumb-color, #ff8a80);
+  background: var(--thumb-color, var(--color-4));
   cursor: pointer;
   box-shadow: 0 0 4px rgba(0,0,0,0.6);
   margin-top: -4px;
@@ -88,7 +95,7 @@ input[type=range]::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--thumb-color, #ff8a80);
+  background: var(--thumb-color, var(--color-4));
   cursor: pointer;
   box-shadow: 0 0 4px rgba(0,0,0,0.6);
 }
@@ -139,6 +146,10 @@ input[type=range]::-moz-range-thumb {
 body.light {
   background: #fef6e5;
   color: #000;
+  --color-1: #5abf90;
+  --color-2: #d8b844;
+  --color-3: #e69538;
+  --color-4: #ff5c49;
 }
 
 body.light .icon-button {
@@ -172,7 +183,7 @@ body.light .icon-button {
 }
 
 .theme-choice input:checked + span {
-  background: currentColor;
+  background: #fff;
   color: #121212;
 }
 

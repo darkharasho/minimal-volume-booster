@@ -32,6 +32,7 @@ settingsBtn.addEventListener('click', () => {
 document.querySelectorAll('input[name="theme"]').forEach(radio => {
   radio.addEventListener('change', async () => {
     applyTheme(radio.value);
+    updateThumb(slider.value);
     try {
       await chrome.storage.sync.set({ theme: radio.value });
     } catch (e) {
@@ -89,6 +90,7 @@ async function init() {
     const { theme } = await chrome.storage.sync.get('theme');
     const selected = theme === 'light' ? 'light' : 'dark';
     applyTheme(selected);
+    updateThumb(slider.value);
     const radio = document.querySelector(`input[name="theme"][value="${selected}"]`);
     if (radio) radio.checked = true;
   } catch (e) {
@@ -116,11 +118,16 @@ function updateBars(val) {
 function updateThumb(val) {
   const max = parseInt(slider.max, 10);
   const ratio = val / max;
+  const styles = getComputedStyle(document.body);
+  const c1 = styles.getPropertyValue('--color-1').trim();
+  const c2 = styles.getPropertyValue('--color-2').trim();
+  const c3 = styles.getPropertyValue('--color-3').trim();
+  const c4 = styles.getPropertyValue('--color-4').trim();
   let color;
-  if (ratio < 0.25) color = '#aee1c9';
-  else if (ratio < 0.5) color = '#f5e8b1';
-  else if (ratio < 0.75) color = '#f6c98f';
-  else color = '#ff8a80';
+  if (ratio < 0.25) color = c1;
+  else if (ratio < 0.5) color = c2;
+  else if (ratio < 0.75) color = c3;
+  else color = c4;
   slider.style.setProperty('--thumb-color', color);
 }
 
