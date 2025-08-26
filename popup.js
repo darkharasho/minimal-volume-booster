@@ -106,17 +106,29 @@ async function getActiveTab() {
 
 function setVolume(multiplier) {
   if (!Number.isFinite(multiplier)) return;
-  document.querySelectorAll('video,audio').forEach(el => {
-    if (!el.__mvbCtx) {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const source = ctx.createMediaElementSource(el);
-      const gain = ctx.createGain();
-      source.connect(gain);
-      gain.connect(ctx.destination);
-      el.__mvbCtx = { ctx, gain };
-    }
-    el.__mvbCtx.gain.gain.value = multiplier;
-  });
+  window.__mvbMultiplier = multiplier;
+
+  const apply = () => {
+    document.querySelectorAll('video,audio').forEach(el => {
+      if (!el.__mvbCtx) {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = ctx.createMediaElementSource(el);
+        const gain = ctx.createGain();
+        source.connect(gain);
+        gain.connect(ctx.destination);
+        el.__mvbCtx = { ctx, gain };
+      }
+      el.__mvbCtx.gain.gain.value = window.__mvbMultiplier;
+    });
+  };
+
+  apply();
+
+  if (!window.__mvbObserver) {
+    window.__mvbObserver = new MutationObserver(apply);
+    window.__mvbObserver.observe(document, { childList: true, subtree: true });
+    document.addEventListener('play', apply, true);
+  }
 }
 
 function sanitize(val, fallback) {
