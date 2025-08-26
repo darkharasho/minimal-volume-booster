@@ -183,31 +183,15 @@ body.light .icon-button {
 }
 
 .theme-choice input[value="light"] + span {
+  background: #121212;
+  color: #fff;
+}
+
+.theme-choice input[value="dark"] + span {
   background: #fef6e5;
   color: #000;
 }
 
 .theme-choice input:checked + span {
-  background: #fff;
-  color: #121212;
-}
-
-.theme-choice input[value="light"]:checked + span {
-  background: #fef6e5;
-  color: #000;
-}
-
-body.light .theme-choice span {
-  border-color: #000;
-  color: #000;
-}
-
-body.light .theme-choice input[value="dark"]:checked + span {
-  background: #000;
-  color: #fef6e5;
-}
-
-body.light .theme-choice input[value="light"]:checked + span {
-  background: #fef6e5;
-  color: #000;
+  box-shadow: 0 0 0 2px currentColor inset;
 }
