@@ -17,13 +17,13 @@ init();
 settingsBtn.addEventListener('click', () => {
   const isHidden = settingsPage.classList.contains('hidden');
   if (isHidden) {
-    main.classList.add('hidden');
+    main.classList.add('invisible');
     settingsPage.classList.remove('hidden');
     settingsBtn.textContent = '✕';
     settingsBtn.classList.add('close');
   } else {
     settingsPage.classList.add('hidden');
-    main.classList.remove('hidden');
+    main.classList.remove('invisible');
     settingsBtn.textContent = '⚙';
     settingsBtn.classList.remove('close');
   }

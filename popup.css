@@ -115,6 +115,10 @@ input[type=range]::-moz-range-thumb {
   display: none;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 .settings {
   position: absolute;
   top: 0;
