@@ -1,3 +1,4 @@
+const extensionApi = typeof browser !== 'undefined' ? browser : chrome;
 const slider = document.getElementById('volume');
 const valueSpan = document.getElementById('value');
 const barsContainer = document.getElementById('bars');
@@ -34,7 +35,7 @@ document.querySelectorAll('input[name="theme"]').forEach(radio => {
     applyTheme(radio.value);
     updateThumb(slider.value);
     try {
-      await chrome.storage.sync.set({ theme: radio.value });
+      await extensionApi.storage.sync.set({ theme: radio.value });
     } catch (e) {
       console.error(e);
     }
@@ -50,12 +51,8 @@ slider.addEventListener('input', async () => {
   const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
     try {
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: setVolume,
-        args: [multiplier]
-      });
-      await chrome.storage.local.set({ [tab.id]: value });
+      await runSetVolume(tab.id, multiplier);
+      await extensionApi.storage.local.set({ [tab.id]: value });
     } catch (e) {
       console.error(e);
     }
@@ -65,7 +62,7 @@ slider.addEventListener('input', async () => {
 async function init() {
   const tab = await getActiveTab();
   if (tab && !isRestricted(tab.url)) {
-    const stored = await chrome.storage.local.get(tab.id.toString());
+    const stored = await extensionApi.storage.local.get(tab.id.toString());
     const value = sanitize(stored[tab.id], 100);
     slider.value = value;
     valueSpan.textContent = `${value}%`;
@@ -73,11 +70,7 @@ async function init() {
     updateThumb(value);
     const multiplier = value / 100;
     try {
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: setVolume,
-        args: [multiplier]
-      });
+      await runSetVolume(tab.id, multiplier);
     } catch (e) {
       console.error(e);
     }
@@ -87,7 +80,7 @@ async function init() {
   }
 
   try {
-    const { theme } = await chrome.storage.sync.get('theme');
+    const { theme } = await extensionApi.storage.sync.get('theme');
     const selected = theme === 'light' ? 'light' : 'dark';
     applyTheme(selected);
     updateThumb(slider.value);
@@ -142,12 +135,31 @@ function isRestricted(url = '') {
 
 async function getActiveTab() {
   try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [tab] = await extensionApi.tabs.query({ active: true, currentWindow: true });
     return tab;
   } catch (e) {
     console.error(e);
     return null;
   }
+}
+
+async function runSetVolume(tabId, multiplier) {
+  if (extensionApi.scripting && extensionApi.scripting.executeScript) {
+    await extensionApi.scripting.executeScript({
+      target: { tabId },
+      func: setVolume,
+      args: [multiplier]
+    });
+    return;
+  }
+
+  if (extensionApi.tabs && extensionApi.tabs.executeScript) {
+    const code = `(${setVolume.toString()})(${multiplier});`;
+    await extensionApi.tabs.executeScript(tabId, { code });
+    return;
+  }
+
+  throw new Error('No compatible scripting API available.');
 }
 function setVolume(multiplier) {
   if (!Number.isFinite(multiplier)) return;

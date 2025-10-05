@@ -8,6 +8,8 @@ A super minimalistic Chrome extension to amplify tab audio up to 600% with a sle
 
 ## Usage
 
+### Chrome
+
 1. Open `chrome://extensions` in Chrome and enable **Developer mode**.
 2. Choose **Load unpacked** and select this folder.
 3. Use the popup slider to set the volume between 0% and 600%.
@@ -17,3 +19,12 @@ A super minimalistic Chrome extension to amplify tab audio up to 600% with a sle
 
 > The control is disabled on Chrome internal pages (e.g. `chrome://`) where
 > content scripts cannot run.
+
+### Firefox
+
+1. Open `about:debugging#/runtime/this-firefox` in Firefox.
+2. Click **Load Temporary Add-on…** and choose `manifest.json` from this folder.
+3. Adjust the slider in the popup to boost audio up to 600% with the same
+   tab-specific persistence and visual feedback as in Chrome.
+
+> Firefox temporarily loaded add-ons are removed when the browser restarts.
