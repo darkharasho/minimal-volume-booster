@@ -2,7 +2,9 @@
 
 # Minimal Volume Booster
 
-A super minimalistic Chrome extension to amplify tab audio up to 600% with a sleek dark UI and a color-coded slider.
+**Current version: 1.0.2** · [Download the latest release](https://github.com/darkharasho/minimal-volume-booster/releases/latest)
+
+A super minimalistic Chrome and Firefox extension to amplify tab audio up to 600% with a sleek dark UI and a color-coded slider.
 
 ![Recording2025-08-25162153online-video-cutter com-ezgif com-crop](https://github.com/user-attachments/assets/53d02c72-c5bb-48b9-b6d4-694a7be0b960)
 
