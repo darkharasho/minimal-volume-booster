@@ -162,20 +162,38 @@ async function runSetVolume(tabId, multiplier) {
   throw new Error('No compatible scripting API available.');
 }
 function setVolume(multiplier) {
-  if (!Number.isFinite(multiplier)) return;
+  if (!Number.isFinite(multiplier) || multiplier < 0) return;
   window.__mvbMultiplier = multiplier;
 
   const apply = () => {
     document.querySelectorAll('video,audio').forEach(el => {
-      if (!el.__mvbCtx) {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const source = ctx.createMediaElementSource(el);
-        const gain = ctx.createGain();
-        source.connect(gain);
-        gain.connect(ctx.destination);
-        el.__mvbCtx = { ctx, gain };
+      const m = window.__mvbMultiplier;
+
+      // Native volume handles attenuation (0-100%) reliably in every browser.
+      // Firefox does not attenuate media routed through Web Audio (bug 966247),
+      // so relying on the gain node alone leaves the element at full volume.
+      el.volume = Math.min(1, m);
+
+      // Only boosting above 100% needs the Web Audio gain node. Effective
+      // output is el.volume * gain, so this stays correct in Chrome too.
+      if (m > 1 && !el.__mvbCtx) {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const source = ctx.createMediaElementSource(el);
+          const gain = ctx.createGain();
+          source.connect(gain);
+          gain.connect(ctx.destination);
+          el.__mvbCtx = { ctx, gain };
+        } catch (e) {
+          // createMediaElementSource can throw (e.g. cross-origin media);
+          // native el.volume still applies as a fallback.
+        }
       }
-      el.__mvbCtx.gain.gain.value = window.__mvbMultiplier;
+
+      if (el.__mvbCtx) {
+        if (el.__mvbCtx.ctx.state === 'suspended') el.__mvbCtx.ctx.resume();
+        el.__mvbCtx.gain.gain.value = Math.max(1, m);
+      }
     });
   };
 
