@@ -1,0 +1,12 @@
+{
+  "name": "minimal-volume-booster",
+  "version": "1.0.3",
+  "private": true,
+  "description": "Dev tooling for the Minimal Volume Booster extension. The extension itself ships no dependencies.",
+  "scripts": {
+    "test": "node test/volume.test.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

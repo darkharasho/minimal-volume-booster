@@ -165,6 +165,24 @@ function setVolume(multiplier) {
   if (!Number.isFinite(multiplier) || multiplier < 0) return;
   window.__mvbMultiplier = multiplier;
 
+  // Routing an element through Web Audio outputs silence when its media is
+  // cross-origin without CORS, and createMediaElementSource does not throw
+  // when that happens - so a try/catch cannot detect it. An element can never
+  // be un-routed either, which means one bad call silences the tab for good.
+  // Only route media we know is safe; everything else keeps native playback.
+  const canRoute = el => {
+    const src = el.currentSrc || el.src;
+    if (!src) return false;
+    if (src.startsWith('data:')) return true;
+    try {
+      const url = new URL(src.startsWith('blob:') ? src.slice(5) : src, location.href);
+      if (url.origin === location.origin) return true;
+    } catch (e) {
+      return false;
+    }
+    return !!el.crossOrigin;
+  };
+
   const apply = () => {
     document.querySelectorAll('video,audio').forEach(el => {
       const m = window.__mvbMultiplier;
@@ -176,7 +194,7 @@ function setVolume(multiplier) {
 
       // Only boosting above 100% needs the Web Audio gain node. Effective
       // output is el.volume * gain, so this stays correct in Chrome too.
-      if (m > 1 && !el.__mvbCtx) {
+      if (m > 1 && !el.__mvbCtx && canRoute(el)) {
         try {
           const ctx = new (window.AudioContext || window.webkitAudioContext)();
           const source = ctx.createMediaElementSource(el);
@@ -185,8 +203,7 @@ function setVolume(multiplier) {
           gain.connect(ctx.destination);
           el.__mvbCtx = { ctx, gain };
         } catch (e) {
-          // createMediaElementSource can throw (e.g. cross-origin media);
-          // native el.volume still applies as a fallback.
+          // Anything unexpected leaves the element on native playback.
         }
       }
 
