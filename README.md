@@ -2,7 +2,7 @@
 
 # Minimal Volume Booster
 
-**Current version: 1.0.2** · [Download the latest release](https://github.com/darkharasho/minimal-volume-booster/releases/latest)
+**Current version: 1.0.3** · [Download the latest release](https://github.com/darkharasho/minimal-volume-booster/releases/latest)
 
 A super minimalistic Chrome and Firefox extension to amplify tab audio up to 600% with a sleek dark UI and a color-coded slider.
 
@@ -30,3 +30,18 @@ A super minimalistic Chrome and Firefox extension to amplify tab audio up to 600
    tab-specific persistence and visual feedback as in Chrome.
 
 > Firefox temporarily loaded add-ons are removed when the browser restarts.
+
+> Boosting above 100% requires routing the audio through the Web Audio API,
+> which browsers only allow for same-origin (or CORS-enabled) media. On sites
+> that serve media cross-origin without CORS, the slider still attenuates
+> normally but will not amplify past 100%.
+
+## Development
+
+The extension itself has no dependencies. To run the regression tests:
+
+```
+npm install
+npx playwright install firefox
+npm test
+```
